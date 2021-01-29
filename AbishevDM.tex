@@ -1,0 +1,640 @@
+\documentclass[a4paper, 12pt]{extreport}
+\usepackage[small]{titlesec}
+\usepackage{slashbox}
+\usepackage{tabularx}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{graphicx}
+\usepackage{colortbl}
+\usepackage{multirow}
+\usepackage{amscd}
+\usepackage{soul}
+\graphicspath{{images/}{../images/}}
+\usepackage{amsthm}
+\usepackage{wrapfig}
+\usepackage[nottoc,notlot,notlof]{tocbibind}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage{comment}
+\usepackage{pgfplots}
+\usepackage[left=2.5cm,right=2.5cm,
+top=2cm,bottom=5cm]{geometry}
+\usepackage{algorithm}
+\usepackage{color}
+\usepackage{pifont}
+\usepackage{algpseudocode}
+\usepackage{setspace}
+\usepackage{authblk}
+\usepackage{url}
+\usepackage{longtable}
+\onehalfspacing 
+\usepackage{subfiles}
+\linespread{1.3}
+
+\renewcommand{\thefigure}{\arabic{figure}}
+
+
+\newtheorem{theorem}{Теорема}
+\newtheorem{lemma}{Лемма}
+\newtheorem{proposition}{Предположение}
+\newtheorem{remark}{Замечание}[chapter]
+\newtheorem{corollary}{Следствие}
+\newtheorem{definition}{Определение}
+
+
+\usepackage[sort]{cite}
+\bibliographystyle{unsrt}
+
+
+\newcommand{\sgn}{\mathrm{sgn}\,}
+\newcommand{\rim}[1]{\romannumeral#1}
+\newcommand{\Rim}[1]{\uppercase\expandafter{\romannumeral#1}}
+\renewcommand{\le}{\leqslant}
+\renewcommand{\ge}{\geqslant}
+\newcommand{\micro}{\hskip1pt}
+
+
+
+\makeatletter
+
+\makeatother
+
+\usepackage{tocloft}
+
+\addtolength\cftsecnumwidth{0.7em} 
+\renewcommand\cftsecpresnum{\S\hskip3pt}
+
+
+\makeatletter
+
+\def\@seccntformat#1{\@ifundefined{#1@cntformat}
+	{\csname the#1\endcsname\quad}
+	{\csname #1@cntformat\endcsname}}
+\newcommand{\section@cntformat}{\S\;\thesection\quad}
+\newcommand{\subsection@cntformat}{\S\;\thesubsection\quad}
+
+
+
+\makeatletter
+
+\renewcommand{\thesection}{\arabic{section}}
+
+
+\makeatletter
+\@definecounter{chapter}
+\makeatother
+
+\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\theequation}{\arabic{section}.\arabic{equation}}
+
+\numberwithin{equation}{section}
+\usepackage{indentfirst}        
+
+\begin{document}
+	\addto\captionsrussian{\def\refname{Список литературы}}
+	\renewcommand{\bibname}{{Список литературы}}
+	\renewcommand{\contentsname}{Содержание}
+
+
+\begin{titlepage}
+	\begin{center}
+		\small
+		~\\[0.1cm]
+		Московский государственный университет имени М.В.Ломоносова
+		~\\[0.1cm]
+		Механико-математический факультет
+		~\\[0.1cm]
+		Кафедра дифференциальных уравнений
+		~\\[0.1cm]
+		
+		\includegraphics{msu_logo.jpg}
+		\normalsize
+	\end{center}
+	
+	
+	\vspace{1.5cm}
+	\begin{center}
+		\textbf{\large{Дипломная работа}}
+		\\[0cm]
+		\textbf{\large {<<О влиянии волатильности на стоимость опциона для корзины активов>>}}
+		%
+		\\[4cm]
+		%
+		\begin{normalsize}
+			\begin{flushright}
+				\small
+				Выполнил: студент 4 курса,\\ направления "Математика" \\
+				Абишев Д.\,М.
+			\end{flushright}
+			\normalsize
+		\end{normalsize}
+		
+		\begin{normalsize}
+			\begin{flushright}
+				\small
+				Научный руководитель:
+				\\
+				доктор физ.-мат. наук, проф. кафедры \\ дифференциальных уравнений\\
+				Шамаев А.\,С.
+			\end{flushright}
+			\normalsize
+		\end{normalsize}
+		\vfill 
+		
+		\small{Москва -- 2020}
+	\end{center} 
+\end{titlepage}
+
+	\setcounter{page}{2}
+	\tableofcontents
+	\thispagestyle{empty}
+	\newpage
+	\chapter{Введение}	
+
+\thispagestyle{empty}
+
+	
+	Опционные контракты являются одним из самых распространённых видов производных ценных бумаг, и с каждым годом их роль на финансовом рынке только увеличивается. Они также являются интереснейшими инструментами для инвесторов. Данный контракт позволяет его держателю право, но не обязанность купить или продать какой-либо актив (акцию) на конкретных условиях. Ключевое влияние на стоимость опциона оказывает волатильность активов. Волатильность является своего рода мерой изменчивости цены акции. Зная этот параметр можно оценить финансовые риски. 
+
+
+	Данная работа посвящена задаче о стоимости опциона на "корзину"\ из двух базовых активов, где функция выплат фигурирует как отношение цен этих активов. В работе рассмотрен метод для расчета стоимости опциона при постоянном тренде и волатильности, которые не являются константами, а зависят линейно от времени, что таким образом представляет собой обобщение дифференциального уравнения Блека-Шоулза-Мертона. В результате получена явная формула и график поверхности, описывающая стоимость опциона, что является важным для финансового анализа.
+
+
+	Вдобавок целью дипломной работы является анализ справедливой цены опциона на биржевом рынке и влияние волатильности на нее. Для этого была составлена программа для расчета цены опциона, что позволяет найти стоимость опциона до момента исполнения контракта зная волатильности активов. Также программа дает возможность проиллюстрировать наглядно влияние роста или падения волатильности на стоимость опциона в конкретные моменты времени, что представляет собой наибольший интерес.
+
+
+	
+	\newpage
+	
+	\chapter{Терминология}
+	\section{ Основные понятия и определения теории стохастических дифференциальных уравнений}
+
+	
+	
+	Пусть дано вероятностное пространство $(\Omega,\mathcal{F},\mathbb{P}).$
+	
+	\begin{definition}
+		Функция  $X : \Omega \to \mathbb{R}^n $ называется  измеримой относительно $\mathcal{F}$, если $X^{-1}(U) := \{\omega \in \Omega; X(\omega) \in U\} \in \mathcal{F}$ для всех открытых множеств $U$ в $\mathbb{R}^n . $
+	\end{definition}
+
+	\begin{definition}
+		Случайный процесс --- это параметризованный набор случайных величин $\{X_t\}_{t \in T} $, определенных на вероятностном пространстве $(\Omega,\mathcal{F},\mathbb{P})$ и принимающих значения в $\mathbb{R}^n .$
+	\end{definition}
+	
+	Фиксируя $\omega \in \Omega$, мы можем рассмотреть функцию $T \to X_t(\omega),\: t \in T,$ которая называется траектория процесса $X_t$.
+
+	\begin{definition}
+		Случайный процесс $W_t$ называется винеровским,
+		если выполняются следующие условия:
+		\begin{enumerate}
+			\item $W_0 = 0$ почти наверное,
+			\item $W_t$ имеет независимые приращения, 
+			\item $W_s - W_t \sim \mathcal{N}(0,s-t)$,
+			\item для почти всех $\omega \in \Omega $ траектории процесса $W_t$ непрерывны.
+		\end{enumerate}
+		
+	\end{definition}	
+	
+	
+	Пусть $W_t$ --- винеровский процесс. Определим для каждого $t$ $\sigma$-алгебру $\mathcal{F}_t$ как порожденную величинами $W_s$ при $0\leqslant s \leqslant t.$ Так как при $s \leqslant t$ $\mathcal{F}_s \subset  \mathcal{F}_t$, то получим возрастающее семейство (поток) {$ \mathcal{F}_t$}.
+	
+	\begin{definition}
+		Случайный процесс $X_t(\omega)$ называется согласованным c потоком {$\mathcal{F}_t$}, если для каждого $t \geqslant 0$ функция $\omega \to X_t(\omega)$ является $\mathcal{F}_t$ --- измеримой.
+		
+	\end{definition}
+	
+	\begin{definition}
+		Процесс вида $X_t = X_0 + \int\limits_0^t \mu_s(s,X_s) ds + \int\limits_0^t \sigma_s(s,X_s) dW_s $ или в стохастической дифференциальной форме (СДУ) $dX_t = \mu(t,X_t)dt + \sigma(t,X_t) dW_t $ называется процессом Ито.
+	\end{definition}
+	
+	\begin{definition}
+		Коэффициенты $\mu(t,X_t)$ и $\sigma(t,X_t)$ называются соответственно трендом (коэффициентом сноса) и волатильностью (коэффициентом диффузии). Тренд показывает ожидаемую доходность цены актива, а волатильность описывает меру изменчивости этого актива.
+	\end{definition}
+	
+	По аналогии можно задать $n$-мерный процесс Ито. Пусть $W_t = (W_{1t}, W_{2t},..., W_{nt})$ --- $n$-мерный винеровский процесс. Тогда $n$-мерный процесс Ито задается системой уравнений:
+	
+	\begin{equation*}	
+	\begin{cases}
+	\	dX_1 = a_1dt + \sigma_{11}dW_{1t} + \sigma_{12}dW_{2t} + ... + \sigma_{1n}dW_{nt}  
+	\\ 
+	\	dX_2=  a_2dt + \sigma_{21}dW_{1t} + \sigma_{22}dW_{2t} + ... + \sigma_{2n}dW_{nt} 
+	\\
+	\   \vdots
+	\\
+	\ dX_n=  a_ndt + \sigma_{n1}dW_{1t} + \sigma_{n2}dW_{2t} + ... + \sigma_{nn}dW_{nt}
+	\end{cases}
+	\end{equation*}
+	или в матричной форме $dX = adt + \sigma dW_t$.
+	
+	\begin{theorem}	[формула Ито для общего случая]
+		
+		Пусть $dX = adt + \sigma dW_t$ $n$-мерный процесс Ито. И пусть $f(t,x) = (f_1(t,x), \dots, f_p(t,x))$ отображение класса $C^2$ из $[0, + \infty ] \times \mathbb{R}^n$ в $\mathbb{R}^n $. Тогда процесс $Y(t,\omega) = f(t,X(t))$ будет снова процессом Ито, $k$-ая компонента которого задается формулой $$dY_k(t,X) = \dfrac{\partial f_k}{\partial t} dt + \sum_i \dfrac{\partial f_k}{\partial x_i} dX_i + \frac{1}{2}\sum_{i,j} \dfrac{\partial^2 f_k}{\partial x_i\partial x_j} dX_idX_j,$$
+		где $dW_{it}dW_{jt} = \delta_{ij}dt$, $dW_{it}dt=dtdW_{it} = 0$, $(dt)^2 = 0$.
+	\end{theorem}
+	
+	\section{Основные понятия и определения финансовой математики}
+	
+	
+	\begin{definition}
+		Ценовой процесс называется безрисковым, если его динамика описывается уравнением: $dB(t)=r(t)B(t)dt$, где $r(t)$ --- произвольный процесс.
+	\end{definition}
+	
+	
+	\begin{definition}
+		Пусть задан $N$-мерный ценовой процесс $\{S(t)\}$. Портфелем называется $\mathcal{F}_t^S$-измеримый $N$-мерный ценовой процесс $\{h(t)\}$. Капитал $V(t)^h$ портфеля $h(t)$ определяется формулой $V(t)^h=h(t)S(t)$. 
+	\end{definition}
+	
+	\begin{definition}
+		Портфель называется самофинансируемым, если изменение цены портфеля происходит только за счет входящих в него активов, то есть нет дополнительных вложений. 
+	\end{definition}
+	
+	\begin{lemma}
+		Портфель $h(t)$ самофинансируемый тогда и только тогда, когда капитал удовлетворяет соотношению
+	 	$$dV^h(t)=V^h(t)\sum_{i=1}^{N}u_i(t)\frac{dS_i(t)}{S_i(t)}-c(t)dt,$$
+	 	где $c(t)$ --- потребление, а $u_i$ --- вклад $i$-ого актива в капитал портфеля.
+	\end{lemma}
+	
+	
+	\begin{definition}
+		Арбитраж на финансовом рынке --- это такой самофинансируемый портфель $h$, что его цена $V^h$ :
+		$V^h(0)=0$ (п.н.), $P(V^h(T) \geqslant 0)=1$ и $P(V^h(T) > 0)>0$. 
+	\end{definition}	
+	
+	
+	\begin{lemma}
+		Пусть существует такой самофинансируемый портфель $h$, что его капитал $V^h$ обладает динамикой вида   $$dV^h(t)=k(t)V^h(t)dt,$$ где $k(t)$ -- некоторый процесс. Тогда либо $k(t)=r(t)$, либо на рынке имеется арбитраж.
+	\end{lemma}
+	
+	
+	\begin{definition}
+		Опцион ценная бумага (контракт), дающая его держателю право на покупку (опцион колл) или продажу акций (опцион пут) в определенный момент времени $T$ по фиксированной цене $K$. Пусть $S_t$--- случайная величина, описывающая цену данной акции в момент времени $t$, тогда выгода от сделки будет определяться следующим образом:
+		\begin{center}
+	
+		$F_T=\bigl(S_T-K\bigr)_+$ ,  для опциона колл,
+		
+		
+		$F_T=\bigl(K-S_T\bigr)_+$ ,  для опциона пут,
+		\end{center}
+		где $(f)_{+}=max(f,0)$.
+	\end{definition}
+	
+	\newpage
+	\chapter{Постановка задачи}
+	\section{Постановка задачи о стоимости опциона на "корзину"\ из двух акций при непостоянной волатильности базовых активов}
+	
+	
+	Рассмотрим рынок активов, состоящий из двух рисковых и одного безрискового актива. Обозначим соответственно через $S_{it}$ цену $i$-го актива и $B_t$ безрискового актива. Присутствие в индексах переменной $t$ обозначает зависимость от времени. Поведение акции можно смоделировать следующей системой стохастических дифференциальных уравнений (СДУ):
+	
+	\begin{equation} \label{eq1}
+		\begin{cases}
+			dB_t = r_t B_tdt
+			\\
+			\\
+			dS_{1t} = \mu_1 S_{1t} dt + \dfrac{S_{1t} \sigma_{1t}}{\sqrt{1+\rho^2}} dW_{1t} +  \dfrac{S_{1t} \sigma_{1t} \rho}{\sqrt{1+\rho^2}} dW_{2t}
+			\\
+			\\
+			dS_{2t} = \mu_2 S_{2t} dt + \dfrac{S_{2t} \sigma_{2t}\rho}{\sqrt{1+\rho^2}} dW_{1t} +  \dfrac{S_{2t} \sigma_{2t}}{\sqrt{1+\rho^2}} dW_{2t}
+		\end{cases}
+	\end{equation}
+	При этом, $W_{it}$, $i=1,2$ --- стандартный винеровский процесс, a $\rho$ --- корреляция активов. 
+	
+	
+	Пусть на рынке свободно продается опцион, и его цена $\Pi(t)$ имеет вид:
+	\begin{equation} \label{eq2}
+		\Pi(t)=F(t,S_{1t},S_{2t})=F(t,x,y),
+	\end{equation}
+	здесь переобозначение $(S_{1t},S_{2t}) \to (x,y)$ сделано для простоты написания частных производных функции $F$.
+	
+	Выведем уравнение, описывающее динамику цены опциона. Для этого применим к уравнению $\eqref{eq2}$ формулу Ито:
+	\begin{equation*}
+		d\Pi(t)=F_tdt+F_xdS_{1t}+F_ydS_{2t}+\frac{1}{2}F_{xx}dS_{1t}dS_{1t}+\frac{1}{2}F_{yy}dS_{2t}dS_{2t}+ F_{xy}dS_{1t}dS_{2t}
+	\end{equation*}
+	Используя правило умножения из формулы Ито:
+		\begin{align*}
+		dS_{1t}dS_{1t}&=S_{1t}^2\sigma_{1t}^2dt ,\\ 
+		dS_{2t}dS_{2t}&=S_{2t}^2\sigma_{2t}^2dt ,\\ 
+		dS_{1t}dS_{2t}&=\dfrac{2\rho S_{1t} S_{2t} \sigma_{1t} \sigma_{2t}}{1+\rho^2}dt .
+			\end{align*}
+	Получим соответственное выражение:
+	\begin{equation*}
+		d\Pi(t) = F_tdt+F_xdS_{1t} + F_ydS_{2t} + \frac{1}{2}F_{xx}S_{1t}^2\sigma_{1t}^2dt+\frac{1}{2}F_{yy}S_{2t}^2\sigma_{2t}^2dt+F_{xy}\dfrac{2\rho S_{1t} S_{2t} \sigma_{1t} \sigma_{2t}}{1+\rho^2}dt.
+	\end{equation*}	
+	Подставляя из системы \eqref{eq1} стохастические уравнения, то динамика цены опциона примет следующий вид:
+	
+	\begin{equation}
+		\frac{d\Pi(t)}{\Pi(t)} = a_{\Pi}(t)dt+\sigma_{1\Pi}(t)dW_{1t} + \sigma_{2\Pi}(t)dW_{2t},
+	\end{equation}
+	где 
+	\begin{align*}
+	&a_{\Pi}=\Bigl(F_t+\mu_1S_{1t}F_x+\mu_2S_{2t}F_y+\frac{1}{2}S_{1t}^2\sigma_{1t}^2F_{xx}+\frac{1}{2}S_{2t}^2\sigma_{2t}^2F_{yy}+\dfrac{2\rho S_{1t} S_{2t} \sigma_{1t} \sigma_{2t}}{1+\rho^2}F_{xy}\Bigr)\frac{1}{\Pi(t)}
+	\\
+	&\sigma_{1\Pi}(t)=\bigl(\sigma_{1t}S_{1t}F_x+\rho\sigma_{2t}S_{2t}F_y\bigr)\frac{1}{\Pi(t)\sqrt{1+\rho^2}}
+	\\
+	&\sigma_{2\Pi}(t)=\bigl(\rho\sigma_{1t}S_{1t}F_x+\sigma_{2t}S_{2t}F_y\bigr)\frac{1}{\Pi(t)\sqrt{1+\rho^2}}
+	\end{align*}
+	
+	
+	Задача о "корзине"\ из двух активов заключается в том, чтобы найти справедливую цену европейского опциона для двух акций с начальным условием \newline $h\bigl(S_{1T},S_{2T}\bigr)=\Bigl(K-~\frac{S_{1T}}{S_2T}\Bigr)_{+}$~, где $(f)_{+}=max(f,0)$ и $0<T<\infty$ --- фиксированный момент времени, при котором исполняется опцион.
+	
+	\newpage
+	\chapter{Решение задачи}
+	\section{Построение задачи Коши для нахождения стоимости опциона }
+	
+	
+	Построим портфель, включающий в себя два рисковых актива и опцион. Через $u_{S_1}$, $u_{S_2}$ и $u_{\Pi}$ обозначим доли активов в портфеле (относительный портфель). Используя самофинансируемость портфеля, получим следующее уравнение для капитала портфеля:
+	
+	$$dV=V\Bigl(u_{S_1}\frac{dS_{1t}}{S_{1t}}+u_{S_2}\frac{dS_{2t}}{S_{2t}}+u_{\Pi}\frac{d\Pi}{\Pi} \Bigr)$$
+	Сгруппируем в уравнении слагаемые с $dt$, $dW_{1t}$ и $dW_{2t}$, получим:
+	\begin{equation*}
+		\begin{gathered}		
+		dV=V(u_{S_1}\mu_1+u_{S_2}\mu_2+u_{\Pi}a_{\Pi})dt + V\Bigl(u_{S_1}\dfrac{\sigma_{1t}}{\sqrt{1+\rho^2}}+u_{S_2}\dfrac{\sigma_{2t}\rho}{\sqrt{1+\rho^2}}+u_{\Pi}\sigma_{1\Pi}\Bigr)dW_{1t}+\\+V\Bigl(u_{S_1}\dfrac{\sigma_{1t}\rho}{\sqrt{1+\rho^2}}+u_{S_2}\dfrac{\sigma_{2t}}{\sqrt{1+\rho^2}}+u_{\Pi}\sigma_{2\Pi}\Bigr)dW_{2t}
+		\end{gathered}
+	\end{equation*}	
+	Используем условие на относительный портфель и занулим коэффициенты перед винеровскими процессами, чтобы портфель был безрисковым, то есть:
+	
+	\begin{equation}\label{eq5.1}
+		\begin{cases}
+			u_{S_1}+u_{S_2}+u_{\Pi}=1
+			\\
+			u_{S_1}\dfrac{\sigma_{1t}}{\sqrt{1+\rho^2}}+u_{S_2}\dfrac{\sigma_{2t}\rho}{\sqrt{1+\rho^2}}+u_{\Pi}\sigma_{1\Pi}=0
+			\\
+			u_{S_1}\dfrac{\sigma_{1t}\rho}{\sqrt{1+\rho^2}}+u_{S_2}\dfrac{\sigma_{2t}}{\sqrt{1+\rho^2}}+u_{\Pi}\sigma_{2\Pi}=0
+		\end{cases}
+	\end{equation}
+
+
+	Таким образом уравнение для капитала портфеля примет вид:
+	$$dV=V(u_{S_1}\mu_1+u_{S_2}\mu_2+u_{\Pi}a_{\Pi})dt .$$
+	
+	
+	Решение системы \eqref{eq5.1} находится из следующих уравнений:
+	
+	\begin{equation}\label{eq5.2}
+		\begin{cases}
+			u_{S_1}=u_{\Pi}\dfrac{(\rho\sigma_{2\Pi}-\sigma_{1\Pi})\sqrt{1+\rho^2}}{\sigma_{1t}(1-\rho^2)}
+			\\
+			\\
+			u_{S_2}=u_{\Pi}\dfrac{(\rho\sigma_{1\Pi}-\sigma_{2\Pi})\sqrt{1+\rho^2}}{\sigma_{2t}(1-\rho^2)}
+			\\
+			\\
+			u_{\Pi}=\dfrac{\sigma_{1t}\sigma_{2t}(1-\rho^2)}{(\rho\sigma_{2\Pi}-\sigma_{1\Pi})\sigma_{2t}\sqrt{1+\rho^2}+(\rho\sigma_{1\Pi}-\sigma_{2\Pi})\sigma_{1t}\sqrt{1+\rho^2}+\sigma_{1t}\sigma_{2t}(1-\rho^2)}
+		\end{cases}
+	\end{equation}
+	
+
+	Подставим выражения для $\sigma_{1\Pi}$ и $\sigma_{2\Pi}$ в систему \eqref{eq5.2} и заменим в них $\Pi(t)$ на $F(t,S_{1t},S_{2t})$, получим, что доли активов равны:
+	
+	
+	
+	\begin{equation}\label{eq5.3}
+		\begin{cases}
+			u_{S_1}=\dfrac{S_{1t}F_x}{S_{1t}F_x+S_{2t}F_y-F}
+			\\
+			\\
+			u_{S_2}=\dfrac{S_{2t}F_y}{S_{1t}F_x+S_{2t}F_y-F}
+			\\
+			\\
+			u_{\Pi}=-\dfrac{F}{S_{1t}F_x+S_{2t}F_y-F}
+		\end{cases}
+	\end{equation}
+	\vspace{0.3cm}
+	
+	Рынок безарбитражен тогда, когда выполняется следующее соотношение:
+	$$u_{S_1}\mu_1+u_{S_2}\mu_2+u_{\Pi}a_{\Pi}=r(t).$$
+	
+	
+	Из системы \eqref{eq5.3} подставим значения для $u_{S_1}$, $u_{S_2}$, $u_{\Pi}$, а также $a_{\Pi}$. Таким образом получим, что цена опциона $F(t,x,y)$ удовлетворяет следующему уравнению в частных производных:
+	
+	
+	\begin{equation}\label{eq5.4}
+		F_t=r(t)F-r(t)xF_x-r(t)yF_y-\frac{\sigma_{1t}^2x^2}{2}F_{xx}-\frac{\sigma_{2t}^2y^2}{2}F_{yy}-\dfrac{2\rho\sigma_{1t}\sigma_{2t}xy}{1+\rho^2}F_{xy} ,
+	\end{equation}
+	
+	с начальным условием:
+	$$F(T,x,y)=h(x,y).$$
+	
+	Сделаем следующие замены: $\ln(x)$ заменим на $u$, $\ln(y)$ на $v$ и $T-t$ на $\tau$. В новых переменных частные производные преобразуются следующим образом:	
+	\begin{align*}
+		\frac{\partial F}{\partial t}&=-\frac{\partial F}{\partial \tau},		&				 \frac{\partial F}{\partial x}&=\frac{1}{x}\frac{\partial F}{\partial u},		&				 \frac{\partial^2 F}{\partial x^2}&=\frac{1}{x^2}\frac{\partial^2 F}{\partial u^2}-\frac{1}{x^2}\frac{\partial F}{\partial u},		&				 \frac{\partial^2 F}{\partial x \partial y}&=\frac{1}{xy}\frac{\partial^2 F}{\partial u \partial v} .
+	\end{align*}
+	Подставляя эти результаты в уравнение \eqref{eq5.4}, имеем:
+	$$F_\tau+r(t)(F-F_u-F_v)-\frac{\sigma_{1t}^2}{2}(F_{uu}-F_u)-\frac{\sigma_{2t}^2}{2}(F_{vv}-F_v)-\dfrac{2\rho\sigma_{1t}\sigma_{2t}}{1+\rho^2}F_{uv}=0 .$$	
+	Заменим также $g(\tau,u,v)=e^{r(t)\tau}F(\tau,u,v)$ получим:
+	
+	\begin{equation}\label{eq5.5}
+		\begin{cases}
+			g_\tau=\bigl(r(t)-\frac{\sigma_{1t}^2}{2}\bigr)g_u+\bigl(r(t)-\frac{\sigma_{2t}^2}{2}\bigr)g_v+\frac{\sigma_{1t}^2}{2}g_{uu}+\frac{\sigma_{2t}^2}{2}g_{vv}+\dfrac{2\rho\sigma_{1t}\sigma_{2t}}{1+\rho^2}g_{uv}
+			\\
+			g(0,u,v)=h(e^u,e^v)
+		\end{cases}
+	\end{equation} 
+	
+	
+	В результате для получения цены опциона на данную пару активов, нужно решить задачу Коши \eqref{eq5.5}.
+	
+	
+	\section{Решение задачи Коши для стоимости опциона}
+	
+%	\vspace{0.3cm}
+	
+	Для решения задачи Коши \eqref{eq5.5} рассмотрим результаты диссертационной работы А.Г.Чечкина \cite{1} и воспользуемся для нашего случая. Таким образом функция стоимости опциона примет следующий вид:  
+
+	\begin{equation*}
+	g(t,S_{1t},S_{2t})=\int \limits_{\mathbb{R}_y^2} h(e^x,e^y) \cdot \omega(T-t,\ln(S_{1t}),\ln(S_{2t}),x,y)dxdy , где
+	\end{equation*}
+	
+	где
+	
+	\begin{align*}
+	&\omega(t,x,y)= C(t)  \cdot \exp\Biggl\{< \biggl(P^{-1}(t) \bigl(x-y-\int\limits_0^tc(\tau)d\tau\bigr)\biggr),\biggl(x-y-\int\limits_0^tc(\tau)d\tau\biggr)>\Biggr\},\\ 
+	&c(\tau)=
+	\begin{pmatrix}
+	r(\tau)-\frac{\sigma_{1}^2(T-\tau)}{2}, & 	r(\tau)-\frac{\sigma_{2}^2(T-\tau)}{2}
+	\end{pmatrix} \\ 
+	&P(t)=-2\int\limits_0^t A(\tau)d\tau,\\ 
+	&C(t)=\dfrac{exp\Bigl\{ -\int\limits_0^t\frac{q(s)}{s}ds\Bigr\}}{\sqrt{(2\pi t)^2 detA(0)}}\\ \\
+	&A(\tau)=
+	\begin{pmatrix}
+	\sigma_{1}^2(T-\tau) & \dfrac{2\rho\sigma_{1}(T-\tau)\sigma_{2}(T-\tau)}{1+\rho^2} \\
+	\dfrac{2\rho\sigma_{1}(T-\tau)\sigma_{2}(T-\tau)}{1+\rho^2} & \sigma_{2}^2(T-\tau)
+	\end{pmatrix}, \\ \\
+	& q(t)=\frac{1}{2} tr\widetilde{Q},\\ \\
+	&\widetilde{Q}=\Biggl[\Bigl[E+\frac{1}{2t}\int\limits_0^t\Bigl(A(\tau)-A(0)\Bigr)d\tau\times A^{-1}(0)\Bigr]^{-1}-E\Biggr] +\\ 
+	&+\Bigl(A(t)-A(0)\Bigr)A^{-1}(0)\biggl[E+\frac{1}{2t}\int\limits_0^t\Bigl(A(\tau)-A(0)\Bigr)d\tau\times A^{-1}(0)\biggr]^{-1} .
+	\end{align*}
+	
+
+	
+		
+
+	Сделав обратную замену получим, что стоимость опциона равна:
+	\begin{equation}\label{6.1}
+		F(t,S_{1t},S_{2t})=e^{-r(T-t)}\int \limits_{\mathbb{R}_y^2} h(e^x,e^y) \cdot \omega(T-t,\ln(S_{1t}),\ln(S_{2t}),x,y)dxdy.
+	\end{equation}
+		
+
+	\chapter{Связь волатильности и опциона}
+	\section{Анализ влияние волатильностей акции на стоимость опциона}
+	
+	Разберем как влияют волатильности акции в зависимости от времени на стоимость опциона при постоянном тренде. Для этого проанализируем три случая, когда волатильности постоянны, возрастают и убывают. 
+	В качестве конкретного примера возьмем соответственно следующие волатильности: 	
+	\begin{align*}
+	1) \hspace{0.3cm}\sigma_{1t}&=\frac{2}{5} , \hspace{1.63cm}\sigma_{2t}=\frac{1}{2} \\
+	2) \hspace{0.3cm} \sigma_{1t}&=\frac{t}{5}+\frac{1}{5} ,\hspace{0.84cm} \sigma_{2t}=\frac{t}{5}+\frac{1}{10} \\
+	3) \hspace{0.3cm} \sigma_{1t}&=-\frac{t}{4}+\frac{3}{5} , \hspace{0.5cm} \sigma_{2t}=-\frac{t}{4}+\frac{7}{10} .
+	\end{align*}
+	
+
+	
+	Также возьмем начальные параметры равными $r=0.05$, $T=2$, $K=100$, где соответственно $r$ --- банковская ставка, $T$ --- время погашение опциона, $K$ --- цена исполнения опциона. 
+	
+	Для того, чтобы получить точное решение воспользуемся нами написанной программой на платформе Mathematica. В результате получим следующие равенства на стоимость опциона в зависимости от времени и цен на акции при трех рассматриваемых случаях (постоянной, возрастающей и убывающей волатильности):
+	
+	\newpage
+$${F_1}(t,x,y)=e^{\frac{t-2}{20}} \left(100-\frac{x}{y}\right) , $$	
+
+	\begin{multline*}
+		{ F_2}({t},{x},{y})=-\frac{19.4 \cdot e^{ \left(t-10 \sqrt{15} \left(\tan ^{-1}\left(\frac{7-2 t}{\sqrt{15}}\right)+\tan ^{-1}\left(\frac{11-4 t}{\sqrt{15}}\right)-2 \tan ^{-1}\left(\sqrt{\frac{3}{5}}\right)\right)-10\right)}}{\left(t^2-7 t+16\right)^{5/4} \left(2 t^2-11 t+17\right)^{5/4} y}  \cdot \\  \\ \cdot \sqrt{\left(3 t^2-21 t+39\right) \left(4 t^2-22 t+31\right)} \left(e^{\frac{1}{75} \left(-t^3+9 t^2-24 t+26\right)} x-100 e^{t/25} y\right) ,
+	\end{multline*}
+	
+	\begin{multline*}
+	{F_3}({t},{x},{y})=-\frac{24293 \cdot e^{\left(-5 t^3-6 t^2-48 t-24 \sqrt{15} \left(\tan ^{-1}\left(\frac{5 t+8}{6 \sqrt{15}}\right)+\tan ^{-1}\left(\frac{5 t+11}{7 \sqrt{15}}\right)-2 \tan ^{-1}\left(\sqrt{\frac{3}{5}}\right)\right)+16\right)}}{\left(25 t^2+80 t+604\right)^{5/4} \left(25 t^2+110 t+856\right)^{5/4} y} \cdot \\ \\  \cdot
+	\sqrt{\left(175 t^2+560 t+1204\right) \left(25 t^2+110 t+268\right)} \left(e^{\frac{3}{25} (2 t+1)} x-100 e^{\frac{3 t^2}{20}+\frac{1}{48} (t-2)^3} y\right) .
+	\end{multline*}
+	
+
+
+	Графики поверхностей для этих функций будут схожими и выглядеть следующим образом: 
+
+
+
+\begin{figure}[h]
+	\begin{center}
+		%	\begin{tabular}{cc}
+		\includegraphics[scale=0.4]{6.pdf}
+		%		&
+		\includegraphics[scale=0.37]{9.pdf}
+		%	\end{tabular}
+		\caption{График поверхности функции опциона.}
+	\end{center}
+\end{figure}
+
+
+
+	
+	Построим таблицу на основе полученных данных для стоимости опциона в зависимости от времени и цен на акции для трех различных случаев:
+	
+	
+	\renewcommand{\arraystretch}{1.4}
+	\renewcommand{\tabcolsep}{1cm}
+	
+	\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{|c|c|c|c|}
+		\hline
+		t & \multicolumn{3}{|c|}{Волатильности $\sigma_{1t}$, $\sigma_{2t}$ }\\
+		\hline
+		- & Константы & Возрастают & Убывают \\
+		\hline
+		0 & 89.32 & 13.65 & 112.3 \\
+		\hline
+		0.3 & 90.67 & 17.90 & 111.74  \\
+		\hline
+		0.5 & 91.58 & 21.64 & 111.60 \\
+		\hline
+		0.7 & 92.49 & 26.33 & 111.02\\
+		\hline
+		1 & 93.83 & 35.77 & 109.33 \\
+		\hline
+		1.3 & 95.25 & 49.15 & 106.88 \\
+		\hline
+		1.5 & 96.15 & 60.78 & 104.77 \\
+		\hline
+		1.7 & 97.04 & 74.73 & 100.23 \\
+		\hline
+		\textbf{2} & \textbf{98.39} & \textbf{98.39} & \textbf{98.39} \\
+		\hline
+	\end{tabular}
+\caption{Стоимость опциона.}
+\end{center}
+\end{table}
+%	\vspace{0.5cm}
+
+	По этим данным построим соответствующие графики для стоимости опциона:
+	\vspace{0.3cm}
+	
+	\begin{figure}[h]
+	\begin{center}
+		\includegraphics[scale=0.45]{gr99.pdf}	
+	\caption{Графики цен опциона в зависимости от времени для трех случаев.}
+	\end{center}
+	\end{figure}
+
+
+	Как видно из таблицы и графиков, если $\sigma_{1t}$, $\sigma_{2t}$ константы, то стоимость опциона будет увеличиваться. Кроме того, если волатильности возрастают, то стоимость также будет возрастать. С другой стороны, если волатильности убывают, то стоимость будет убывать. Важным аспектом этого является то, что прослеживается прямая зависимость между стоимостью опциона и волатильностими акции. Более того, при написании дипломной работы было рассмотрено большое количество примеров для разных волатильностей и акций, результаты которых также подтверждают прямое влияние волатильности на цену опциона. 
+
+
+
+
+	\chapter{Заключение}
+	
+	Данная дипломная работа является актуальной в финансовой математике и стохастическом исчислении, так как опционные контракты играют большую роль в ней. Более того, программа расчета опциона, и выявленная прямая зависимость между волатильностью и стоимостью опциона является полезным инструментом на финансовом рынке. Стоит также отметить, что полученную явную формулу \eqref{6.1} можно обобщить на разные виды опционов для двух активов, такие как спрэд, кванто, радуга.
+
+
+
+	В заключение, важно отметить то, что полученные результаты в работе можно будет применить и в реальности на финансовом рынке. Допустим, в будущем произойдет событие, влияющее на цену акции, примером которого может быть следующее: важное заявление директора компании, рост или падение коррелирующей акции и множество других событий. Однако, неизвестно в каком направлении будет держатся курс акции после данного события, но несомненно волатильность будет увеличиваться. Вследствие этого можно будет спрогнозировать справедливую цену на опцион колл или пут от двух активов до исполнения контракта, что позволяет находить выгодные опционы и извлекать прибыль путем покупки и дальнейшей реализации данного опциона.
+
+
+	\begin{thebibliography}{99}
+	
+		
+		\bibitem{1}
+		
+		{\it Булинский~А.В., Ширяев~А.Н.} Теория случайных процессов. // М.: Физматлит, 2003. 400с.
+
+		
+		\bibitem{2}
+	
+		{\it Бьорк~Т.} Теория арбитража в непрерывном времени. // М.: МНЦМО, 2008. 565с.
+
+	
+		\bibitem{3}
+
+		{\it Халл~Дж.К.} Опционы, фьючерсы и другие производные финансовые инструменты. 6-е изд. // М.,С-П.,К.: Вильямс, 2007. 1052с.
+
+		\bibitem{4}
+
+		{\it Жуленев~С.В.} Финансовая математика. Введение в классическую теорию. // М.: МГУ, 2001. 418с.
+	
+		\bibitem{5}
+	
+		{\it Оксендаль~Б.} Стохастические дифференциальные уравнения. // М.: Мир, 2003. 410с.
+
+	
+		\bibitem{6}
+
+		{\it Чечкин~А.Г.} Диссертационная работа. О некоторых вопросах фундаментальных решений. // М.: 2016. 99с.
+		
+		\bibitem{7}
+		
+		{\it Ширяев~А.Н.} Основы стохастической финансовой математики. // М.: Фазис, 2004. 1024с.
+		
+		\bibitem{8}
+		
+		{\it Ширяев~А.Н.} Вероятность. // М.: МЦНМО, 2004. 928с.
+		
+	\end{thebibliography}
+
+	\thispagestyle{empty}
+	
+	
+	
+	
+	
+	
+
+	
+\end{document}
